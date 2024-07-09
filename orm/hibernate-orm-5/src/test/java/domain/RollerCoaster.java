@@ -1,10 +1,14 @@
 package domain;
 
+import org.hibernate.annotations.FilterDef;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "roller_coaster")
+@FilterDef(name = "onlyAuthorized")
+@FilterDef(name = "onlyUnsafe", defaultCondition = "MAX_SUPPORTED_WEIGHT <= 50")
 public class RollerCoaster implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

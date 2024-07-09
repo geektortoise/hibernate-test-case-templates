@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import domain.People;
 import domain.RollerCoaster;
+import org.hibernate.Session;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.junit.After;
 import org.junit.Before;
@@ -104,6 +105,58 @@ public class JPAUnitTestCase {
 		people = query.getResultList();
 		assert people.size() == 1;
 		assert people.get(0).getAuthorizedRollerCoasters() != null;
+		assert people.get(0).getAuthorizedRollerCoasters().size() == 2;
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
+
+	@Test
+	public void hhh123TestFetchGraphWithAdditionalStaticFilterCondition() throws Exception {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		List<People> people;
+
+		//requests and tests
+		entityManager
+				.unwrap(Session.class)
+				.enableFilter("onlyUnsafe")
+		;
+
+		query = entityManager.createQuery("select distinct p from People p", People.class)
+				.setHint("jakarta.persistence.fetchgraph",
+						parse(People.class,"authorizedRollerCoasters",entityManager.unwrap(SessionImplementor.class))
+				)
+		;
+
+		people = query.getResultList();
+		assert people.size() == 1;
+		assert people.get(0).getAuthorizedRollerCoasters().size() == 1;
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
+
+	@Test
+	public void hhh123TestFetchGraphWithAdditionalFilterConditionOnTwoEntities() throws Exception {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		List<People> people;
+
+		//requests and tests
+		entityManager
+				.unwrap(Session.class)
+				.enableFilter("onlyAuthorized")
+		;
+
+		query = entityManager.createQuery("select distinct p from People p", People.class)
+				.setHint("jakarta.persistence.fetchgraph",
+						parse(People.class,"authorizedRollerCoasters",entityManager.unwrap(SessionImplementor.class))
+				)
+		;
+
+		people = query.getResultList();
+		assert people.size() == 1;
 		assert people.get(0).getAuthorizedRollerCoasters().size() == 2;
 
 		entityManager.getTransaction().commit();
