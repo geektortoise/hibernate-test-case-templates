@@ -69,7 +69,7 @@ public class JPAUnitTestCase {
 	// Entities are auto-discovered, so just add them anywhere on class-path
 	// Add your tests, using standard JUnit.
 	@Test
-	public void hhh123TestFetchGraph() throws Exception {
+	public void hhh18355TestFetchGraph() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;
@@ -90,7 +90,31 @@ public class JPAUnitTestCase {
 	}
 
 	@Test
-	public void hhh123TestFetchGraphWithAdditionalStaticCondition() throws Exception {
+	public void hhh18355TestFetchGraphWithAdditionalCondition() throws Exception {
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		entityManager.getTransaction().begin();
+		List<People> people;
+
+		//requests and tests
+		query = entityManager.createQuery("select distinct p from People p" +
+								" left join p.authorizedRollerCoasters arc on arc.maxWeight > p.weight"
+						, People.class)
+				.setHint("javax.persistence.fetchgraph",
+						parse(People.class,"authorizedRollerCoasters",entityManager.unwrap(SessionImplementor.class))
+				)
+		;
+
+		people = query.getResultList();
+		assert people.size() == 1;
+		assert people.get(0).getAuthorizedRollerCoasters() != null;
+		assert people.get(0).getAuthorizedRollerCoasters().size() == 2;
+
+		entityManager.getTransaction().commit();
+		entityManager.close();
+	}
+
+	@Test
+	public void hhh18355TestFetchGraphWithAdditionalStaticFilterCondition() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;
@@ -116,7 +140,7 @@ public class JPAUnitTestCase {
 	}
 
 	@Test
-	public void hhh123TestFetchGraphWithAdditionalConditionOnTwoEntities() throws Exception {
+	public void hhh18355TestFetchGraphWithAdditionalFilterConditionOnTwoEntities() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;

@@ -66,7 +66,7 @@ public class JPAUnitTestCase {
 	// Entities are auto-discovered, so just add them anywhere on class-path
 	// Add your tests, using standard JUnit.
 	@Test
-	public void hhh123TestFetchGraph() throws Exception {
+	public void hhh18355TestFetchGraph() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;
@@ -88,7 +88,7 @@ public class JPAUnitTestCase {
 	}
 
 	@Test
-	public void hhh123TestFetchGraphWithAdditionalCondition() throws Exception {
+	public void hhh18355TestFetchGraphWithAdditionalCondition() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;
@@ -112,7 +112,7 @@ public class JPAUnitTestCase {
 	}
 
 	@Test
-	public void hhh123TestFetchGraphWithAdditionalStaticFilterCondition() throws Exception {
+	public void hhh18355TestFetchGraphWithAdditionalStaticFilterCondition() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;
@@ -138,7 +138,7 @@ public class JPAUnitTestCase {
 	}
 
 	@Test
-	public void hhh123TestFetchGraphWithAdditionalFilterConditionOnTwoEntities() throws Exception {
+	public void hhh18355TestFetchGraphWithAdditionalFilterConditionOnTwoEntities() throws Exception {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<People> people;
